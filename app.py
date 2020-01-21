@@ -155,6 +155,12 @@ def video_converter():
 
       return context
 
+@app.route("/api/file-upload",methods=['GET', 'POST'])
+def file_upload():
+
+  if request.method == 'POST':
+    # Create a file converter to WAV utility here with pydub
+
 @app.route("/api/wikidata",methods=['GET', 'POST'])
 def wikidata():
 

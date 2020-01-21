@@ -1,5 +1,7 @@
 RELEASE NOTES
 
+🎉 21/01/2020 - File Upload front end component + utility
+
 🌈 19/01/2020 - New repo on BitBucket
 
 🎉 05/01/2020 - New UI
