@@ -9,6 +9,7 @@
     "react": "^16.11.0",
     "react-audio-recorder": "git+https://github.com/matthausen/audio_recorder_plugin.git",
     "react-dom": "^16.11.0",
+    "react-dropzone": "^10.2.1",
     "react-scripts": "^3.3.0"
   },
   "scripts": {

@@ -7,13 +7,13 @@ import {
   Typography,
   Button,
   Box,
-  Avatar,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
+import DropZone from '../FileUpload';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MicIcon from '@material-ui/icons/Mic';
 import VideocamIcon from '@material-ui/icons/Videocam';
@@ -317,11 +317,12 @@ const Main = () => {
           </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.expansion}>
-            <Container>
+            <DropZone />
+            {/* <Container>
               <Typography>
                 Coming soon
-          </Typography>
-            </Container>
+              </Typography>
+            </Container> */}
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </Container>
