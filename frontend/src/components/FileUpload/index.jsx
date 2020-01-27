@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import URLs from '../../api';
 
 const useStyles = makeStyles(theme => ({
   dropzone: {
@@ -16,8 +17,27 @@ const useStyles = makeStyles(theme => ({
 
 export default function DropZone() {
   const classes = useStyles();
+  const acceptedFormats = ["audio/mp3", "audio/wav", "audio/flac", "audio/wma"];
+  const maxSize = 20000000;
+  const config = {
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*",
+    }
+  }
   const onDrop = useCallback(acceptedFiles => {
-    // Do something with the files
+    acceptedFiles.map(file => {
+      if (acceptedFormats.indexOf(file.type) > -1) {
+        if (file.size <= maxSize) {
+          axios.post(URLs.FILEUPLOAD, file, config)
+            .then(res => console.log(res.data))
+        } else {
+          console.log('second error here');
+        }
+      } else {
+        console.log('first error here')
+      }
+    })
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
@@ -26,8 +46,8 @@ export default function DropZone() {
       <input {...getInputProps()} />
       {
         isDragActive ?
-          <Typography className={classes.text} variant="body1" component="p">Drop the files here ...</Typography> :
-          <Typography className={classes.text} variant="body1" component="p">Drag 'n' drop some files here, or click to select files</Typography>
+          <Typography className={classes.text} variant="body1" component="p">Drop audio files ...</Typography> :
+          <Typography className={classes.text} variant="body1" component="p">Drag and drop your audio files here, supported formats: MP3, WMV, FLAC, WAV.</Typography>
       }
     </Container>
   )

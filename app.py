@@ -10,6 +10,7 @@ import validators
 import random
 import time
 
+from io import BytesIO
 from pydub import AudioSegment
 from youtube_dl import YoutubeDL
 from config import bucket_name, storage_uri
@@ -37,6 +38,12 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     print('File {} uploaded to {}.'.format(
         source_file_name,
         destination_blob_name))
+
+# Convert file to WAV format
+def convert_to_wav(file):
+  sound = AudioSegment.from_file(file)
+  sound = sound.set_channels(1)
+  sound.export("uploaded_mono.wav", format="wav")
 
 @app.route("/",methods=['GET', 'POST'])
 def index():
@@ -157,28 +164,58 @@ def video_converter():
 
 @app.route("/api/file-upload",methods=['GET', 'POST'])
 def file_upload():
-
   if request.method == 'POST':
-    # Create a file converter to WAV utility here with pydub
+    # Remove previous audio file if existing
+    if os.path.exists('uploaded_mono.wav'):
+      try:
+        os.remove('uploaded_mono.wav')
+        print('Files removed')
+      except FileNotFoundError:
+        print('No file found')
+
+    uploaded_audio = BytesIO(request.data)
+    convert_to_wav(uploaded_audio)
+    
+    audio_file = 'uploaded_mono.wav'
+    model = ''
+    
+    source_file_name = audio_file
+    destination_blob_name = audio_file
+    upload_blob(bucket_name, source_file_name, destination_blob_name)
+
+    text_file = speech_to_text.sample_long_running_recognize(storage_uri, destination_blob_name)
+    summary = summarise.summarise(text_file)
+    extracted_entities = ner.extract_entities(text_file, model)
+    entity_list = str(ner.list_entities(text_file, model))
+    wiki_list = entity_list[1:-1].split(",")
+
+    # Return original text and summary to the UI
+    context = { 
+        "summary": summary,
+        "text": text_file,
+        "highlights": extracted_entities,
+        "entities": wiki_list,
+    }
+
+    return context
 
 @app.route("/api/wikidata",methods=['GET', 'POST'])
 def wikidata():
+  if request.method == 'POST':
+    data = request.data
+    wiki_summary = str(wikipedia.summary(data, sentences=3))
+    wiki_article = str(wikipedia.search(data))
+    wiki_content = wikipedia.page(data)
+    image = str(wiki_content.images[0])
+    
 
-    if request.method == 'POST':
-      data = request.data
-      wiki_summary = str(wikipedia.summary(data, sentences=3))
-      wiki_article = str(wikipedia.search(data))
-      wiki_content = wikipedia.page(data)
-      image = str(wiki_content.images[0])
-      
-
-      context = {
-        "summary": wiki_summary,
-        "article": wiki_article,
-        "image": image
-      }
-      
-      return context
+    context = {
+      "summary": wiki_summary,
+      "article": wiki_article,
+      "image": image
+    }
+    
+    return context
        
 if __name__ == '__main__':
     app.run(use_reloader=True, port=5000, threaded=True)
