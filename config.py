@@ -1,2 +1,2 @@
-bucket_name = 'lingua-audio-file'
-storage_uri = 'gs://lingua-audio-file/output.wav'
+bucket_name = 'lingua-audio-files'
+storage_uri = 'gs://lingua-audio-files/output.wav'

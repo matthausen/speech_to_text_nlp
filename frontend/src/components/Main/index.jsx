@@ -85,13 +85,13 @@ const Main = () => {
   const [model, setModel] = useState('default')
   const [progress, setProgress] = useState(false);
   const [videoUrl, setVideoUrl] = useState();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checkedDefault: true,
     checkedBioMed: false,
     checkedLaw: false,
     checkedTech: false,
   });
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const handleExpansion = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -318,11 +318,6 @@ const Main = () => {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.expansion}>
             <DropZone />
-            {/* <Container>
-              <Typography>
-                Coming soon
-              </Typography>
-            </Container> */}
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </Container>
