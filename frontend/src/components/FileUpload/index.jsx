@@ -1,16 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import {
-  Container,
-  Typography,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from '@material-ui/core';
+import { Container, Typography, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import URLs from '../../api';
 
@@ -38,26 +29,14 @@ export default function DropZone() {
       "Access-Control-Allow-Origin": "*",
     }
   }
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleUpload = (file) => {
-    axios.post(URLs.FILEUPLOAD, file, config)
-      .then(res => res.data);
-  };
 
   const onDrop = useCallback(acceptedFiles => {
-    handleClickOpen();
     acceptedFiles.map(file => {
       setFileName(file.name)
       if (acceptedFormats.indexOf(file.type) > -1) {
         if (file.size <= maxSize) {
-          handleUpload(file)
+          axios.post(URLs.FILEUPLOAD, file, config)
+            .then(res => res.data);
         } else {
           setFileTooBig('This file is too big. Max size: 20Mb')
         }
@@ -76,28 +55,6 @@ export default function DropZone() {
           <Typography className={classes.text} variant="body1" component="p">Drop audio files ...</Typography> :
           <Typography className={classes.text} variant="body1" component="p">Drag and drop your audio files here, supported formats: MP3, WMV, FLAC, WAV.</Typography>
       }
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{`Do you want to upload ${fileName}?`}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {(fileTooBig) ? fileTooBig : null}
-            {(wrongFormat) ? wrongFormat : null}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpload} color="primary" autoFocus>
-            Upload
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   )
 }
