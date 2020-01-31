@@ -36,5 +36,5 @@ To upload files to the Google cloud storage, refer to the following documentatio
 To use the speech to text API after activation, refer to the following link:
 `https://cloud.google.com/speech-to-text/docs/`
 
-#### Deployment:
+#### Deployment as a Google cloud app engine:
 `gcloud app deploy --project deep-lingua`

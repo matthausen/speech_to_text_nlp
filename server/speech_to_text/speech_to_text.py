@@ -13,13 +13,14 @@ def sample_long_running_recognize(storage_uri, destination_blob_name):
 
     client = speech_v1.SpeechClient()
 
-    storage_uri = (f'gs://audio_inputs/{destination_blob_name}')
+    storage_uri = (f'gs://lingua-audio-files/{destination_blob_name}')
 
     # Sample rate in Hertz of the audio data sent: omitt if not sure
     # sample_rate_hertz = 44100
 
     # The language of the supplied audio
     language_code = "en-US"
+    enableAutomaticPunctuation=True
 
     # Encoding of audio data sent. This sample sets this explicitly.
     # This field is optional for FLAC and WAV audio formats.
@@ -28,6 +29,7 @@ def sample_long_running_recognize(storage_uri, destination_blob_name):
         # "sample_rate_hertz": sample_rate_hertz,
         "language_code": language_code,
         "encoding": encoding,
+        "enable_automatic_punctuation": enableAutomaticPunctuation,
     }
     audio = {"uri": storage_uri}
 
