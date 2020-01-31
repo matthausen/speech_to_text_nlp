@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 import {
   Container,
   TextField,
@@ -13,7 +14,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
-import DropZone from '../FileUpload';
+import { useDropzone } from 'react-dropzone';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MicIcon from '@material-ui/icons/Mic';
 import VideocamIcon from '@material-ui/icons/Videocam';
@@ -22,7 +23,7 @@ import Hero from '../Hero';
 import AudioRecorder from 'react-audio-recorder';
 import Transcript from '../Transcript'
 import Footer from '../Footer';
-import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import URLs from '../../api';
 
 const useStyles = makeStyles(theme => ({
@@ -56,6 +57,13 @@ const useStyles = makeStyles(theme => ({
     '& > label': {
       color: 'grey'
     },
+  },
+  dropzone: {
+    border: '2px dashed #00e8c8',
+    padding: 40
+  },
+  text: {
+    color: 'white'
   }
 }));
 
@@ -81,17 +89,29 @@ const GreenCheckbox = withStyles({
 
 const Main = () => {
   const classes = useStyles();
+
   const [transcript, setTranscript] = useState();
   const [model, setModel] = useState('default')
   const [progress, setProgress] = useState(false);
   const [videoUrl, setVideoUrl] = useState();
+  const [expanded, setExpanded] = useState(false);
   const [state, setState] = useState({
     checkedDefault: true,
     checkedBioMed: false,
     checkedLaw: false,
     checkedTech: false,
   });
-  const [expanded, setExpanded] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const acceptedFormats = ["audio/mp3", "audio/wav", "audio/flac", "audio/wma"];
+  const maxSize = 20000000;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*",
+    }
+  }
 
   const handleExpansion = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -102,13 +122,6 @@ const Main = () => {
     (state.checkedDefault) ? setModel('default') : setModel('biomed');
     console.log('Model: ', model);
   };
-
-  const config = {
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-      "Access-Control-Allow-Origin": "*",
-    }
-  }
 
   function handleUrl(e) {
     e.preventDefault();
@@ -154,10 +167,33 @@ const Main = () => {
     }
   }
 
+  const onDrop = useCallback(acceptedFiles => {
+    acceptedFiles.map(file => {
+      if (acceptedFormats.indexOf(file.type) > -1) {
+        if (file.size <= maxSize) {
+          axios.post(URLs.FILEUPLOAD, file, config)
+            .then(res => {
+              setTranscript(res.data);
+              setProgress(false);
+            });
+          enqueueSnackbar(`${file.name} uploaded. Processing...`, { variant: 'success' });
+          setProgress(true)
+        } else {
+          enqueueSnackbar('This file is too big. Max size: 20Mb', { variant: 'error' });
+        }
+      } else {
+        enqueueSnackbar('This format is not supported', { variant: 'error' });
+      }
+    })
+  }, [])
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
   return (
-    <div>
+    <>
       <Hero />
       <Container>
+
+        {/* Audio Recorder */}
         <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleExpansion('panel1')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -226,6 +262,8 @@ const Main = () => {
             </Container>
           </ExpansionPanelDetails>
         </ExpansionPanel>
+
+        {/* Video converter */}
         <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleExpansion('panel2')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -304,6 +342,8 @@ const Main = () => {
             </Container>
           </ExpansionPanelDetails>
         </ExpansionPanel>
+
+        {/* File Upload */}
         <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleExpansion('panel3')}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -317,7 +357,14 @@ const Main = () => {
           </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.expansion}>
-            <DropZone />
+            <Container className={classes.dropzone} {...getRootProps()}>
+              <input {...getInputProps()} />
+              {
+                isDragActive ?
+                  <Typography className={classes.text} variant="body1" component="p">Drop audio files ...</Typography> :
+                  <Typography className={classes.text} variant="body1" component="p">Drag and drop your audio files here, supported formats: MP3, WMV, FLAC, WAV.</Typography>
+              }
+            </Container>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </Container>
@@ -325,7 +372,7 @@ const Main = () => {
         <Transcript content={transcript} progress={progress} />
       </Container>
       <Footer />
-    </div>
+    </>
   );
 }
 

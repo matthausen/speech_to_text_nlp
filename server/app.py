@@ -42,7 +42,8 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 # Convert file to WAV format
 def convert_to_wav(file):
   sound = AudioSegment.from_file(file)
-  sound = sound.set_channels(1)
+  # Set width to 2 = 16 bit per sample
+  sound = sound.set_channels(1).set_sample_width(2)
   sound.export("uploaded_mono.wav", format="wav")
 
 @app.route("/",methods=['GET', 'POST'])
