@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from flask_cors import CORS
 from flask import jsonify
 
@@ -217,6 +217,11 @@ def wikidata():
     }
     
     return context
+
+@app.route('/train')
+def train():
+    return send_from_directory('./spaCy_annotator',
+                               'index.html', as_attachment=False)
        
 if __name__ == '__main__':
     app.run(use_reloader=True, port=5000, threaded=True)
