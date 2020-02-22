@@ -67,7 +67,7 @@ The training precision increase with the amount of annotation. Spacy recommends 
 
 In this project we decided to expand the default model by adding few moer entities:
 
-MEDICAL
 BIOLOGICAL
-WEAPONS
+MEDICAL
 TECHNOLOGY
+WEAPONS

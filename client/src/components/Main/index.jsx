@@ -11,8 +11,10 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelSummary,
-  FormControlLabel,
-  Checkbox,
+  Select,
+  FormControl,
+  MenuItem,
+  InputLabel
 } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -31,6 +33,10 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3, 2),
     margin: '3rem'
   },
+  formControl: {
+    margin: theme.spacing(2),
+    minWidth: 240,
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
@@ -41,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
   },
   expansion: {
-    backgroundColor: '#282828',
+    backgroundColor: '#3a3a3a',
     padding: '4rem'
   },
   icons: {
@@ -77,16 +83,6 @@ const GreenButton = withStyles(theme => ({
   },
 }))(Button);
 
-const GreenCheckbox = withStyles({
-  root: {
-    color: '#00e8c8',
-    '&$checked': {
-      color: '#00e8c8',
-    },
-  },
-  checked: {},
-})(props => <Checkbox color="default" {...props} />);
-
 const Main = () => {
   const classes = useStyles();
 
@@ -95,12 +91,6 @@ const Main = () => {
   const [progress, setProgress] = useState(false);
   const [videoUrl, setVideoUrl] = useState();
   const [expanded, setExpanded] = useState(false);
-  const [state, setState] = useState({
-    checkedDefault: true,
-    checkedBioMed: false,
-    checkedLaw: false,
-    checkedTech: false,
-  });
   const { enqueueSnackbar } = useSnackbar();
 
   const acceptedFormats = ["audio/mp3", "audio/wav", "audio/flac", "audio/wma"];
@@ -117,10 +107,8 @@ const Main = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
-    (state.checkedDefault) ? setModel('default') : setModel('biomed');
-    console.log('Model: ', model);
+  const handleChange = event => {
+    setModel(event.target.value);
   };
 
   function handleUrl(e) {
@@ -211,46 +199,18 @@ const Main = () => {
                 config={config}
               />
               <Box>
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedDefault}
-                      onChange={handleChange('checkedDefault')}
-                      value="checkedDefault"
-                    />
-                  }
-                  label="Default"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedBioMed}
-                      onChange={handleChange('checkedBioMed')}
-                      value="checkedBioMed"
-                    />
-                  }
-                  label="Biology & Medicine"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedLaw}
-                      onChange={handleChange('checkedLaw')}
-                      value="checkedLaw"
-                    />
-                  }
-                  label="Law & legal"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedTech}
-                      onChange={handleChange('checkedTech')}
-                      value="checkedTech"
-                    />
-                  }
-                  label="Technology"
-                />
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="model">Model</InputLabel>
+                  <Select
+                    labelId="model"
+                    id="model"
+                    value={model}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={'default'}>Default</MenuItem>
+                    <MenuItem value={'enhanced'}>Enhanced</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
               <GreenButton
                 classeName={classes.button}
@@ -291,46 +251,18 @@ const Main = () => {
                 />
               </form>
               <Box>
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedDefault}
-                      onChange={handleChange('checkedDefault')}
-                      value="checkedDefault"
-                    />
-                  }
-                  label="Default"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedBioMed}
-                      onChange={handleChange('checkedBioMed')}
-                      value="checkedBioMed"
-                    />
-                  }
-                  label="Biology & Medicine"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedLaw}
-                      onChange={handleChange('checkedLaw')}
-                      value="checkedLaw"
-                    />
-                  }
-                  label="Law & legal"
-                />
-                <FormControlLabel
-                  control={
-                    <GreenCheckbox
-                      checked={state.checkedTech}
-                      onChange={handleChange('checkedTech')}
-                      value="checkedTech"
-                    />
-                  }
-                  label="Technology"
-                />
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="model">Model</InputLabel>
+                  <Select
+                    labelId="model"
+                    id="model"
+                    value={model}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={'default'}>Default</MenuItem>
+                    <MenuItem value={'enhanced'}>Enhanced</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
               <GreenButton
                 classeName={classes.button}

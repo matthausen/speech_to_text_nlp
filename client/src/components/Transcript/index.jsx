@@ -48,7 +48,6 @@ const Transcript = (props) => {
       {content ? (
         <Paper className={classes.root}>
           <Box>
-            <Typography>test</Typography>
             {Object.values(content)[0] ? (
               <EntitiesList entities={Object.values(content)[0]} />
             ) : (
@@ -71,7 +70,6 @@ const Transcript = (props) => {
             <Typography variant="h5" component="h3">
               Full transcript
               </Typography>
-            <p>test</p>
             {(Object.values(content)[1]) ? (
               <div dangerouslySetInnerHTML={{ __html: (Object.values(content)[1]) }} />
             ) : (
