@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from flask_cors import CORS
 from flask import jsonify
 
@@ -23,7 +23,11 @@ import wikipedia
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials.json"
 
+<<<<<<< HEAD:server/app.py
+app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
+=======
 app = Flask(__name__, static_folder="../frontend/build/static", template_folder="../frontend/build")
+>>>>>>> master:server/app.py
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -217,6 +221,14 @@ def wikidata():
     }
     
     return context
+<<<<<<< HEAD:server/app.py
+
+@app.route('/train')
+def train():
+    return send_from_directory('./spaCy_annotator',
+                               'index.html', as_attachment=False)
+=======
+>>>>>>> master:server/app.py
        
 if __name__ == '__main__':
     app.run(use_reloader=True, port=5000, threaded=True)
