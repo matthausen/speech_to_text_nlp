@@ -61,8 +61,8 @@ def list_entities(text_file, model):
   nlp = en_core_web_sm.load()
   if(model and model == 'default'):
     nlp = en_core_web_sm.load()
-  if(model and model == 'biomed'):
-    nlp = spacy.load('darwin')
+  if(model and model == 'enhanced'):
+    nlp = spacy.load('lingua_ner_model')
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
   ny_bb = text_file
