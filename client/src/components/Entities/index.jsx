@@ -41,6 +41,9 @@ export default function EntitiesList({ entities }) {
     article: 'No article available for this word',
   });
 
+  // const entitiesList = JSON.parse(entities)
+  console.log(entities);
+
   const config = {
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -63,7 +66,8 @@ export default function EntitiesList({ entities }) {
   };
 
   return (
-    <div className={classes.root}>
+    <p>Example</p>
+    /* <div className={classes.root}>
       {(entities) ? entities.map((e, index) => {
         if (e !== "") {
           return (
@@ -91,6 +95,6 @@ export default function EntitiesList({ entities }) {
           </DialogContentText>
         </DialogContent>
       </Dialog>
-    </div>
+    </div> */
   );
 }

@@ -34,16 +34,13 @@ def extract_entities(text_file, model):
   Counter(items).most_common(3)
 
   sentences = [x for x in text_file.sents]
-  # print(sentences)
-  #displacy.render(nlp(str(sentences[20])), jupyter=True, style='ent')
-  #displacy.render(nlp(str(sentences[20])), style='dep', jupyter = True, options = {'distance': 120})
+
   [(x.orth_,x.pos_, x.lemma_) for x in [y 
                                     for y
                                     in nlp(str(sentences[0])) 
                                     if not y.is_stop and y.pos_ != 'PUNCT']]
 
   dict([(str(x), x.label_) for x in nlp(str(sentences[0])).ents])
-  # print([(x, x.ent_iob_, x.ent_type_) for x in sentences[0]])
 
   """ colors = {
     "GPE": "linear-gradient(90deg, #aa9cfc, #fc9ce7)",
@@ -57,19 +54,55 @@ def extract_entities(text_file, model):
 
 
 def list_entities(text_file, model):
+
+  entity_list = {}
   
-  nlp = en_core_web_sm.load()
-  if(model and model == 'default'):
-    nlp = en_core_web_sm.load()
-  if(model and model == 'enhanced'):
-    nlp = spacy.load('lingua_ner_model')
-    nlp.add_pipe(nlp.create_pipe('sentencizer'))
+  if (model == 'default'):
+    try:
+      nlp = en_core_web_sm.load()
 
-  ny_bb = text_file
-  text_file = nlp(ny_bb)
-  len(text_file.ents)
+      ny_bb = text_file
 
-  # The list of entities in the text
-  entity_list = text_file.ents
+      default_entities = nlp(ny_bb)
+      len(default_entities.ents)
+
+      default_labels = [x.label_ for x in default_entities.ents]
+      dl = tuple(default_labels)
+
+      default_dictionary = dict(zip(default_entities.ents,dl))
+
+      entity_list = default_dictionary
+      print(entity_list)
+    except:
+      print('An exception occured at the entity extraction level')
+
+
+
+  if (model == 'enhanced'):
+    try:
+      nlp = en_core_web_sm.load()
+      nlp2 = spacy.load('lingua')
+      nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
+
+      ny_bb = text_file
+
+      default_entities = nlp(ny_bb)
+      len(default_entities.ents)
+
+      custom_entities = nlp2(ny_bb)
+      len(custom_entities.ents)
+      print(custom_entities)
+
+      default_labels = [x.label_ for x in default_entities.ents]
+      custom_labels = [x.label_ for x in custom_entities.ents]
+      dl = tuple(default_labels)
+      cl = tuple(custom_labels)
+
+      default_dictionary = dict(zip(default_entities.ents,dl))
+      custom_dictionary = dict(zip(custom_entities.ents,cl))
+
+      entity_list = {**default_dictionary, **custom_dictionary}
+    except:
+      print('An exception occured at the entity extraction level')
 
   return entity_list

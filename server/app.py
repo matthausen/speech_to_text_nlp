@@ -89,19 +89,17 @@ def audio_converter():
         # Summarize the returned text
         summary = summarise.summarise(text_file)
 
-        # Performs named entity recognition with spacy
+        # Returns highlighted text with NER spacy
         extracted_entities = ner.extract_entities(text_file, model)
 
         # Return list of entities to the UI
         entity_list = str(ner.list_entities(text_file, model))
-        wiki_list = entity_list[1:-1].split(",")
 
         # Return original text and summary to the UI
         context = { 
             "summary": summary,
             "text": text_file,
-            "highlights": extracted_entities,
-            "entities": wiki_list,
+            "entities": entity_list,
         }
 
         return context
@@ -146,19 +144,17 @@ def video_converter():
       # Summarize the returned text
       summary = summarise.summarise(text_file)
 
-      # Performs named entity recognition with spacy
+      # Returns highlighted text with NER spacy
       extracted_entities = ner.extract_entities(text_file, model)
 
       # Return list of entities to the UI
       entity_list = str(ner.list_entities(text_file, model))
-      wiki_list = entity_list[1:-1].split(",")
 
       # Return original text and summary to the UI
       context = { 
           "summary": summary,
           "text": text_file,
-          "highlights": extracted_entities,
-          "entities": wiki_list,
+          "entities": entity_list,
       }
 
       return context
@@ -186,16 +182,18 @@ def file_upload():
 
     text_file = speech_to_text.sample_long_running_recognize(storage_uri, destination_blob_name)
     summary = summarise.summarise(text_file)
+
+    # Returns highlighted text with NER spacy
     extracted_entities = ner.extract_entities(text_file, model)
+
+    #Return list of entitites to the UI
     entity_list = str(ner.list_entities(text_file, model))
-    wiki_list = entity_list[1:-1].split(",")
 
     # Return original text and summary to the UI
     context = { 
         "summary": summary,
         "text": text_file,
-        "highlights": extracted_entities,
-        "entities": wiki_list,
+        "entities": entity_list,
     }
 
     return context
