@@ -35,6 +35,32 @@ const Transcript = (props) => {
   const classes = useStyles();
   const { content, progress } = props;
 
+  function renderTranscript() {
+    return (
+      <Paper className={classes.root}>
+        <Box>
+          {Object.values(content)[0] ? (
+            <EntitiesList entities={Object.values(content)[0]} />
+          ) : (
+              <Typography component="p">No entities were found in this transcript</Typography>
+            )}
+          <Typography variant="h5" component="h3">Summary</Typography>
+          <Box className={classes.summaryBox}>
+            <Typography component="p" className={classes.summary}>
+              {Object.values(content)[1] || (
+                <Typography component="p">Could not generate a summary for this audio</Typography>
+              )}
+            </Typography>
+          </Box>
+          <Typography variant="h5" component="h3">Full transcript</Typography>
+          {Object.values(content)[2] ? (
+            <div dangerouslySetInnerHTML={{ __html: Object.values(content)[2] }} />
+          ) : (<Typography component="p">Could not generate a transcript for this audio file</Typography>)}
+        </Box>
+      </Paper>
+    );
+  }
+
   return (
     <div>
       {progress ? (
@@ -45,39 +71,7 @@ const Transcript = (props) => {
           <CircularProgress className={classes.progressCircle} />
         </div>
       ) : null}
-      {content ? (
-        <Paper className={classes.root}>
-          <Box>
-            {Object.values(content)[0] ? (
-              <EntitiesList entities={Object.values(content)[0]} />
-            ) : (
-                <Typography component="p">
-                  No entities were found in this transcript
-                  </Typography>
-              )}
-            <Typography variant="h5" component="h3">
-              Summary
-              </Typography>
-            <Box className={classes.summaryBox}>
-              <Typography component="p" className={classes.summary}>
-                {(Object.values(content)[2]) ? (Object.values(content)[2]) : (
-                  <Typography component="p">
-                    Could not generate a summary for this audio
-                  </Typography>
-                )}
-              </Typography>
-            </Box>
-            <Typography variant="h5" component="h3">
-              Full transcript
-              </Typography>
-            {(Object.values(content)[1]) ? (
-              <div dangerouslySetInnerHTML={{ __html: (Object.values(content)[1]) }} />
-            ) : (
-                <div dangerouslySetInnerHTML={{ __html: (Object.values(content)[3]) }} />
-              )}
-          </Box>
-        </Paper>
-      ) : null}
+      {content ? renderTranscript() : null}
     </div>
   );
 }

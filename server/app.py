@@ -23,11 +23,7 @@ import wikipedia
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials.json"
 
-<<<<<<< HEAD:server/app.py
 app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
-=======
-app = Flask(__name__, static_folder="../frontend/build/static", template_folder="../frontend/build")
->>>>>>> master:server/app.py
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -93,19 +89,17 @@ def audio_converter():
         # Summarize the returned text
         summary = summarise.summarise(text_file)
 
-        # Performs named entity recognition with spacy
-        extracted_entities = ner.extract_entities(text_file, model)
+        # Returns highlighted text with NER spacy
+        # extracted_entities = ner.extract_entities(text_file, model)
 
         # Return list of entities to the UI
         entity_list = str(ner.list_entities(text_file, model))
-        wiki_list = entity_list[1:-1].split(",")
 
         # Return original text and summary to the UI
         context = { 
             "summary": summary,
             "text": text_file,
-            "highlights": extracted_entities,
-            "entities": wiki_list,
+            "entities": entity_list,
         }
 
         return context
@@ -150,19 +144,17 @@ def video_converter():
       # Summarize the returned text
       summary = summarise.summarise(text_file)
 
-      # Performs named entity recognition with spacy
-      extracted_entities = ner.extract_entities(text_file, model)
+      # Returns highlighted text with NER spacy
+      # extracted_entities = ner.extract_entities(text_file, model)
 
       # Return list of entities to the UI
       entity_list = str(ner.list_entities(text_file, model))
-      wiki_list = entity_list[1:-1].split(",")
 
       # Return original text and summary to the UI
       context = { 
           "summary": summary,
           "text": text_file,
-          "highlights": extracted_entities,
-          "entities": wiki_list,
+          "entities": entity_list,
       }
 
       return context
@@ -190,16 +182,18 @@ def file_upload():
 
     text_file = speech_to_text.sample_long_running_recognize(storage_uri, destination_blob_name)
     summary = summarise.summarise(text_file)
-    extracted_entities = ner.extract_entities(text_file, model)
+
+    # Returns highlighted text with NER spacy
+    # extracted_entities = ner.extract_entities(text_file, model)
+
+    #Return list of entitites to the UI
     entity_list = str(ner.list_entities(text_file, model))
-    wiki_list = entity_list[1:-1].split(",")
 
     # Return original text and summary to the UI
     context = { 
         "summary": summary,
         "text": text_file,
-        "highlights": extracted_entities,
-        "entities": wiki_list,
+        "entities": entity_list,
     }
 
     return context
@@ -221,14 +215,11 @@ def wikidata():
     }
     
     return context
-<<<<<<< HEAD:server/app.py
 
 @app.route('/train')
 def train():
     return send_from_directory('./spaCy_annotator',
                                'index.html', as_attachment=False)
-=======
->>>>>>> master:server/app.py
        
 if __name__ == '__main__':
     app.run(use_reloader=True, port=5000, threaded=True)
