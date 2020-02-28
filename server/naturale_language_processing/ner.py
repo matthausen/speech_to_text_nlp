@@ -20,7 +20,7 @@ def extract_entities(text_file, model):
   if(model and model == 'default' or model == ''):
     nlp = en_core_web_sm.load()
   if(model and model == 'enhanced'):
-    nlp = spacy.load('lingua_ner_model')
+    nlp = spacy.load('lingua')
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
   ny_bb = text_file
@@ -76,33 +76,30 @@ def list_entities(text_file, model):
     except:
       print('An exception occured at the entity extraction level')
 
-
-
   if (model == 'enhanced'):
-    try:
-      nlp = en_core_web_sm.load()
-      nlp2 = spacy.load('lingua')
-      nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
+    nlp = en_core_web_sm.load()
+    nlp2 = spacy.load('lingua')
+    nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
 
-      ny_bb = text_file
+    ny_bb = text_file
 
-      default_entities = nlp(ny_bb)
-      len(default_entities.ents)
+    default_entities = nlp(ny_bb)
+    len(default_entities.ents)
 
-      custom_entities = nlp2(ny_bb)
-      len(custom_entities.ents)
-      print(custom_entities)
+    custom_entities = nlp2(ny_bb)
+    len(custom_entities.ents)
 
-      default_labels = [x.label_ for x in default_entities.ents]
-      custom_labels = [x.label_ for x in custom_entities.ents]
-      dl = tuple(default_labels)
-      cl = tuple(custom_labels)
+    default_labels = [x.label_ for x in default_entities.ents]
+    custom_labels = [x.label_ for x in custom_entities.ents]
+    dl = tuple(default_labels)
+    cl = tuple(custom_labels)
 
-      default_dictionary = dict(zip(default_entities.ents,dl))
-      custom_dictionary = dict(zip(custom_entities.ents,cl))
+    default_dictionary = dict(zip(default_entities.ents,dl))
+    custom_dictionary = dict(zip(custom_entities.ents,cl))
 
-      entity_list = {**default_dictionary, **custom_dictionary}
-    except:
-      print('An exception occured at the entity extraction level')
+    entity_list = {**default_dictionary, **custom_dictionary}
+    # print(default_dictionary)
+    # print(custom_dictionary)
+    # print(entity_list)
 
   return entity_list

@@ -90,7 +90,7 @@ def audio_converter():
         summary = summarise.summarise(text_file)
 
         # Returns highlighted text with NER spacy
-        extracted_entities = ner.extract_entities(text_file, model)
+        # extracted_entities = ner.extract_entities(text_file, model)
 
         # Return list of entities to the UI
         entity_list = str(ner.list_entities(text_file, model))
@@ -145,7 +145,7 @@ def video_converter():
       summary = summarise.summarise(text_file)
 
       # Returns highlighted text with NER spacy
-      extracted_entities = ner.extract_entities(text_file, model)
+      # extracted_entities = ner.extract_entities(text_file, model)
 
       # Return list of entities to the UI
       entity_list = str(ner.list_entities(text_file, model))
@@ -184,7 +184,7 @@ def file_upload():
     summary = summarise.summarise(text_file)
 
     # Returns highlighted text with NER spacy
-    extracted_entities = ner.extract_entities(text_file, model)
+    # extracted_entities = ner.extract_entities(text_file, model)
 
     #Return list of entitites to the UI
     entity_list = str(ner.list_entities(text_file, model))
