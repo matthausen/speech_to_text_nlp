@@ -77,6 +77,7 @@ def list_entities(text_file, model):
       print('An exception occured at the entity extraction level')
 
   if (model == 'enhanced'):
+
     nlp = en_core_web_sm.load()
     nlp2 = spacy.load('lingua')
     nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
@@ -84,22 +85,25 @@ def list_entities(text_file, model):
     ny_bb = text_file
 
     default_entities = nlp(ny_bb)
-    len(default_entities.ents)
-
     custom_entities = nlp2(ny_bb)
-    len(custom_entities.ents)
 
     default_labels = [x.label_ for x in default_entities.ents]
     custom_labels = [x.label_ for x in custom_entities.ents]
+    
+    default_text = [x.text for x in default_entities.ents]
+    custom_text = [x.text for x in custom_entities.ents]
+
+    dt = tuple(default_text)
+    ct = tuple(custom_text)
+
     dl = tuple(default_labels)
     cl = tuple(custom_labels)
 
-    default_dictionary = dict(zip(default_entities.ents,dl))
-    custom_dictionary = dict(zip(custom_entities.ents,cl))
-
+    # Add quotes and make a dictionary entity - label
+    default_dictionary = dict(zip(dt,dl))
+    custom_dictionary = dict(zip(ct,cl))
     entity_list = {**default_dictionary, **custom_dictionary}
-    # print(default_dictionary)
-    # print(custom_dictionary)
-    # print(entity_list)
+
+    print(entity_list)
 
   return entity_list

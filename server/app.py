@@ -108,7 +108,6 @@ def audio_converter():
 def video_converter():
 
     if request.method == 'POST':
-
       # Remove previous audio file if existing
       if os.path.exists('video.wav') or os.path.exists('video_mono.wav'):
         try:
@@ -148,13 +147,13 @@ def video_converter():
       # extracted_entities = ner.extract_entities(text_file, model)
 
       # Return list of entities to the UI
-      entity_list = str(ner.list_entities(text_file, model))
-
+      entity_list = json.dumps(ner.list_entities(text_file, model))
+      
       # Return original text and summary to the UI
       context = { 
           "summary": summary,
           "text": text_file,
-          "entities": entity_list,
+          "entities": str(entity_list),
       }
 
       return context
