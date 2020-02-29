@@ -104,6 +104,4 @@ def list_entities(text_file, model):
     custom_dictionary = dict(zip(ct,cl))
     entity_list = {**default_dictionary, **custom_dictionary}
 
-    print(entity_list)
-
   return entity_list

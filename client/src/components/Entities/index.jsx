@@ -42,7 +42,6 @@ export default function EntitiesList({ entities }) {
   });
 
   const entitiesList = JSON.parse(entities)
-  console.log(entitiesList);
 
   const config = {
     headers: {
@@ -67,7 +66,7 @@ export default function EntitiesList({ entities }) {
 
   return (
     <div className={classes.root}>
-      {/* {(entitiesList) ? Object.keys(entitiesList).map((e, index) => {
+      {(entitiesList) ? Object.keys(entitiesList).map((e, index) => {
         if (e !== "") {
           return (
             <Chip key={index} avatar={<Avatar>M</Avatar>} label={e} onClick={() => fetchWiki(e)} />
@@ -93,7 +92,7 @@ export default function EntitiesList({ entities }) {
             {search && search.article ? search.article : null}
           </DialogContentText>
         </DialogContent>
-      </Dialog>  */}
+      </Dialog>
     </div>
   );
 }
