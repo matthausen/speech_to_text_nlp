@@ -72,6 +72,7 @@ export default function EntitiesList({ entities }) {
             <Chip key={index} avatar={<Avatar>M</Avatar>} label={e} onClick={() => fetchWiki(e)} />
           )
         }
+        return true;
       }
       ) : null}
       <Dialog

@@ -172,8 +172,9 @@ const Main = () => {
       } else {
         enqueueSnackbar('This format is not supported', { variant: 'error' });
       }
+      return true;
     })
-  }, [])
+  }, [acceptedFormats, config, enqueueSnackbar])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
