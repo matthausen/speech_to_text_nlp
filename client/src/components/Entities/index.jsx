@@ -41,8 +41,7 @@ export default function EntitiesList({ entities }) {
     article: 'No article available for this word',
   });
 
-  // const entitiesList = JSON.parse(entities)
-  console.log(entities);
+  const entitiesList = JSON.parse(entities)
 
   const config = {
     headers: {
@@ -66,14 +65,14 @@ export default function EntitiesList({ entities }) {
   };
 
   return (
-    <p>Example</p>
-    /* <div className={classes.root}>
-      {(entities) ? entities.map((e, index) => {
+    <div className={classes.root}>
+      {(entitiesList) ? Object.keys(entitiesList).map((e, index) => {
         if (e !== "") {
           return (
             <Chip key={index} avatar={<Avatar>M</Avatar>} label={e} onClick={() => fetchWiki(e)} />
           )
         }
+        return true;
       }
       ) : null}
       <Dialog
@@ -95,6 +94,6 @@ export default function EntitiesList({ entities }) {
           </DialogContentText>
         </DialogContent>
       </Dialog>
-    </div> */
+    </div>
   );
 }

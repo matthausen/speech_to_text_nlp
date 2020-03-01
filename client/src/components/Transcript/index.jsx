@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography, CircularProgress } from '@material-ui/core';
+import Highlighter from "react-highlight-words";
 import EntitiesList from '../Entities';
 
 const useStyles = makeStyles(theme => ({
@@ -27,6 +28,14 @@ const useStyles = makeStyles(theme => ({
   summary: {
     lineHeight: 1.6,
     fontWeight: 800
+  },
+  text: {
+    lineHeight: 1.8,
+    "& > mark ": {
+      backgroundColor: "#00e8c8",
+      padding: 5,
+      borderRadius: 5
+    }
   }
 }));
 
@@ -34,6 +43,12 @@ const useStyles = makeStyles(theme => ({
 const Transcript = (props) => {
   const classes = useStyles();
   const { content, progress } = props;
+
+  const entitiesList = [];
+  if (content) {
+    const entitiesJson = JSON.parse(Object.values(content)[0]);
+    Object.keys(entitiesJson).map(e => entitiesList.push(e));
+  }
 
   function renderTranscript() {
     return (
@@ -54,7 +69,15 @@ const Transcript = (props) => {
           </Box>
           <Typography variant="h5" component="h3">Full transcript</Typography>
           {Object.values(content)[2] ? (
-            <div dangerouslySetInnerHTML={{ __html: Object.values(content)[2] }} />
+            <Highlighter
+              className={classes.text}
+              highlightClassName="YourHighlightClass"
+              searchWords={entitiesList}
+              autoEscape={true}
+              textToHighlight={Object.values(content)[2]}
+            >
+              <div dangerouslySetInnerHTML={{ __html: Object.values(content)[2] }} />
+            </Highlighter>
           ) : (<Typography component="p">Could not generate a transcript for this audio file</Typography>)}
         </Box>
       </Paper>
