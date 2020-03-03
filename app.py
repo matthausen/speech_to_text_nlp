@@ -23,7 +23,7 @@ import wikipedia
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./credentials.json"
 
-app = Flask(__name__, static_folder="../client/build/static", template_folder="../client/build")
+app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
