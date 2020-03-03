@@ -1,13 +1,22 @@
-runtime: python37
+runtime: python
+env: flex
 api_version: 1
-threadsafe: true
+
+runtime_config:
+  python_version: 3
+
+entrypoint: gunicorn -b :$PORT main:app
+
+env_variables:
+  CLOUD_STORAGE_BUCKET: gs://lingua-audio-files
+
+resources:
+  cpu: 1
+  memory_gb: 2
+  disk_size_gb: 10
 
 handlers:
-- url: /static
+- url: /client/build/static
   static_dir: static
 - url: /.*
   script: main.app
-
-libraries:
-  - name: ssl
-    version: latest
