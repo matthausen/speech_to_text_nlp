@@ -7,7 +7,6 @@ from pprint import pprint
 import spacy
 from spacy import displacy
 from collections import Counter
-import en_core_web_sm
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -16,9 +15,9 @@ import re
 def extract_entities(text_file, model):
   
   # Switch between models
-  nlp = en_core_web_sm.load()
+  nlp = spacy.load('en_core_web_sm')
   if(model and model == 'default' or model == ''):
-    nlp = en_core_web_sm.load()
+    nlp = spacy.load('en_core_web_sm')
   if(model and model == 'enhanced'):
     nlp = spacy.load('lingua')
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
@@ -78,7 +77,8 @@ def list_entities(text_file, model):
 
   if (model == 'enhanced'):
 
-    nlp = en_core_web_sm.load()
+    # nlp = en_core_web_sm.load()
+    nlp = spacy.load('en_core_web_sm')
     nlp2 = spacy.load('lingua')
     nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
 
