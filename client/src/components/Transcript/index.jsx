@@ -44,10 +44,13 @@ const Transcript = (props) => {
   const classes = useStyles();
   const { content, progress } = props;
 
-  const entitiesList = [];
+  const entityNames = [];
+  const entityLabels = [];
   if (content) {
     const entitiesJson = JSON.parse(Object.values(content)[0]);
-    Object.keys(entitiesJson).map(e => entitiesList.push(e));
+    Object.keys(entitiesJson).map(e => entityNames.push(e));
+    Object.values(entitiesJson).map(e => entityLabels.push(e))
+    console.log(entityLabels)
   }
 
   function renderTranscript() {
@@ -72,7 +75,7 @@ const Transcript = (props) => {
             <Highlighter
               className={classes.text}
               highlightClassName="YourHighlightClass"
-              searchWords={entitiesList}
+              searchWords={entityNames}
               autoEscape={true}
               textToHighlight={Object.values(content)[2]}
             >

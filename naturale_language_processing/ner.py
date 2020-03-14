@@ -12,48 +12,8 @@ import requests
 import re
 
 
-def extract_entities(text_file, model):
-  
-  # Switch between models
-  nlp = spacy.load('en_core_web_sm')
-  if(model and model == 'default' or model == ''):
-    nlp = spacy.load('en_core_web_sm')
-  if(model and model == 'enhanced'):
-    nlp = spacy.load('lingua')
-    nlp.add_pipe(nlp.create_pipe('sentencizer'))
-
-  ny_bb = text_file
-  text_file = nlp(ny_bb)
-  len(text_file.ents)
-
-  labels = [x.label_ for x in text_file.ents]
-  Counter(labels)
-
-  items = [x.text for x in text_file.ents]
-  Counter(items).most_common(3)
-
-  sentences = [x for x in text_file.sents]
-
-  [(x.orth_,x.pos_, x.lemma_) for x in [y 
-                                    for y
-                                    in nlp(str(sentences[0])) 
-                                    if not y.is_stop and y.pos_ != 'PUNCT']]
-
-  dict([(str(x), x.label_) for x in nlp(str(sentences[0])).ents])
-
-  """ colors = {
-    "GPE": "linear-gradient(90deg, #aa9cfc, #fc9ce7)",
-    "CARDINAL" : "linear-gradient(90deg, #3A4983, #3B1486)"
-    }
-  options = {"ents": ["GPE", "CARDINAL"], "colors": colors} """
-
-  html = displacy.render(text_file, page=True, style='ent') # Add options here to change colors
-
-  return html
-
-
 def list_entities(text_file, model):
-
+  
   entity_list = {}
   
   if (model == 'default'):
@@ -105,3 +65,43 @@ def list_entities(text_file, model):
     entity_list = {**default_dictionary, **custom_dictionary}
 
   return entity_list
+
+# Use this function if you want to return plain html to the UI
+
+def extract_entities(text_file, model):
+  # Switch between models
+  nlp = spacy.load('en_core_web_sm')
+  if(model and model == 'default' or model == ''):
+    nlp = spacy.load('en_core_web_sm')
+  if(model and model == 'enhanced'):
+    nlp = spacy.load('lingua')
+    nlp.add_pipe(nlp.create_pipe('sentencizer'))
+
+  ny_bb = text_file
+  text_file = nlp(ny_bb)
+  len(text_file.ents)
+
+  labels = [x.label_ for x in text_file.ents]
+  Counter(labels)
+
+  items = [x.text for x in text_file.ents]
+  Counter(items).most_common(3)
+
+  sentences = [x for x in text_file.sents]
+
+  [(x.orth_,x.pos_, x.lemma_) for x in [y 
+                                    for y
+                                    in nlp(str(sentences[0])) 
+                                    if not y.is_stop and y.pos_ != 'PUNCT']]
+
+  dict([(str(x), x.label_) for x in nlp(str(sentences[0])).ents])
+
+  """ colors = {
+    "GPE": "linear-gradient(90deg, #aa9cfc, #fc9ce7)",
+    "CARDINAL" : "linear-gradient(90deg, #3A4983, #3B1486)"
+    }
+  options = {"ents": ["GPE", "CARDINAL"], "colors": colors} """
+
+  html = displacy.render(text_file, page=True, style='ent') # Add options here to change colors
+
+  return html

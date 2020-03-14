@@ -6,7 +6,7 @@ import { SnackbarProvider } from 'notistack';
 import Header from './components/Header';
 
 function App() {
-  const { isLoading, user, loginWithRedirect, logout } = useAuth0();
+  const { isLoading, user, loginWithRedirect } = useAuth0();
 
   if (!isLoading && !user) {
     loginWithRedirect();
