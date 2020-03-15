@@ -1,5 +1,7 @@
 RELEASE NOTES
 
+🎉 15/03/2020 - New design + CI deployment
+
 🔧 01/03/2020 - New frontend build + compiling errors fixed
 
 🎉 27/01/2020 - File Upload back end + validation

@@ -7,18 +7,72 @@ from pprint import pprint
 import spacy
 from spacy import displacy
 from collections import Counter
-import en_core_web_sm
 from bs4 import BeautifulSoup
 import requests
 import re
 
 
-def extract_entities(text_file, model):
+def list_entities(text_file, model):
   
+  entity_list = {}
+  
+  if (model == 'default'):
+    try:
+      nlp = en_core_web_sm.load()
+
+      ny_bb = text_file
+
+      default_entities = nlp(ny_bb)
+      len(default_entities.ents)
+
+      default_labels = [x.label_ for x in default_entities.ents]
+      dl = tuple(default_labels)
+
+      default_dictionary = dict(zip(default_entities.ents,dl))
+
+      entity_list = default_dictionary
+      print(entity_list)
+    except:
+      print('An exception occured at the entity extraction level')
+
+  if (model == 'enhanced'):
+
+    # nlp = en_core_web_sm.load()
+    nlp = spacy.load('en_core_web_sm')
+    nlp2 = spacy.load('lingua')
+    nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
+
+    ny_bb = text_file
+
+    default_entities = nlp(ny_bb)
+    custom_entities = nlp2(ny_bb)
+
+    default_labels = [x.label_ for x in default_entities.ents]
+    custom_labels = [x.label_ for x in custom_entities.ents]
+    
+    default_text = [x.text for x in default_entities.ents]
+    custom_text = [x.text for x in custom_entities.ents]
+
+    dt = tuple(default_text)
+    ct = tuple(custom_text)
+
+    dl = tuple(default_labels)
+    cl = tuple(custom_labels)
+
+    # Add quotes and make a dictionary entity - label
+    default_dictionary = dict(zip(dt,dl))
+    custom_dictionary = dict(zip(ct,cl))
+    entity_list = {**default_dictionary, **custom_dictionary}
+
+  return entity_list
+
+# Use this function if you want to return plain html to the UI
+
+def extract_entities(text_file, model):
   # Switch between models
-  nlp = en_core_web_sm.load()
+  nlp = spacy.load('en_core_web_sm')
   if(model and model == 'default' or model == ''):
-    nlp = en_core_web_sm.load()
+    nlp = spacy.load('en_core_web_sm')
   if(model and model == 'enhanced'):
     nlp = spacy.load('lingua')
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
@@ -51,57 +105,3 @@ def extract_entities(text_file, model):
   html = displacy.render(text_file, page=True, style='ent') # Add options here to change colors
 
   return html
-
-
-def list_entities(text_file, model):
-
-  entity_list = {}
-  
-  if (model == 'default'):
-    try:
-      nlp = en_core_web_sm.load()
-
-      ny_bb = text_file
-
-      default_entities = nlp(ny_bb)
-      len(default_entities.ents)
-
-      default_labels = [x.label_ for x in default_entities.ents]
-      dl = tuple(default_labels)
-
-      default_dictionary = dict(zip(default_entities.ents,dl))
-
-      entity_list = default_dictionary
-      print(entity_list)
-    except:
-      print('An exception occured at the entity extraction level')
-
-  if (model == 'enhanced'):
-
-    nlp = en_core_web_sm.load()
-    nlp2 = spacy.load('lingua')
-    nlp2.add_pipe(nlp2.create_pipe('sentencizer'))
-
-    ny_bb = text_file
-
-    default_entities = nlp(ny_bb)
-    custom_entities = nlp2(ny_bb)
-
-    default_labels = [x.label_ for x in default_entities.ents]
-    custom_labels = [x.label_ for x in custom_entities.ents]
-    
-    default_text = [x.text for x in default_entities.ents]
-    custom_text = [x.text for x in custom_entities.ents]
-
-    dt = tuple(default_text)
-    ct = tuple(custom_text)
-
-    dl = tuple(default_labels)
-    cl = tuple(custom_labels)
-
-    # Add quotes and make a dictionary entity - label
-    default_dictionary = dict(zip(dt,dl))
-    custom_dictionary = dict(zip(ct,cl))
-    entity_list = {**default_dictionary, **custom_dictionary}
-
-  return entity_list

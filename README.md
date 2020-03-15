@@ -65,7 +65,7 @@ CARDINAL
 However it is possible to create a custom model trained to recognise different entities, or to expand the default model by adding more entities to the list.
 The training precision increase with the amount of annotation. Spacy recommends to use at least a few hundred per entity to achieve accuracy.
 
-In this project we decided to expand the default model by adding few moer entities:
+In this project we decided to expand the default model by adding few more entities:
 
 BIOLOGICAL
 MEDICAL

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography, CircularProgress } from '@material-ui/core';
 import Highlighter from "react-highlight-words";
 import EntitiesList from '../Entities';
+import { useEntityValue } from '../../contexts/entityContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,11 +44,24 @@ const useStyles = makeStyles(theme => ({
 const Transcript = (props) => {
   const classes = useStyles();
   const { content, progress } = props;
+  const [{ entityList }, dispatch] = useEntityValue();
 
-  const entitiesList = [];
+  const entityNames = [];
+  let entitiesJson = {};
+  const updateList = entitiesJson => {
+    dispatch({
+      type: 'update',
+      newEntityList: { list: [{ entitiesJson }] }
+    });
+  }
+
+  useEffect(() => {
+    updateList(entitiesJson);
+  }, [content])
+
   if (content) {
-    const entitiesJson = JSON.parse(Object.values(content)[0]);
-    Object.keys(entitiesJson).map(e => entitiesList.push(e));
+    entitiesJson = JSON.parse(Object.values(content)[0]);
+    Object.keys(entitiesJson).map(e => entityNames.push(e));
   }
 
   function renderTranscript() {
@@ -72,7 +86,7 @@ const Transcript = (props) => {
             <Highlighter
               className={classes.text}
               highlightClassName="YourHighlightClass"
-              searchWords={entitiesList}
+              searchWords={entityNames}
               autoEscape={true}
               textToHighlight={Object.values(content)[2]}
             >
