@@ -21,10 +21,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MicIcon from '@material-ui/icons/Mic';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Hero from '../Hero';
+//import Hero from '../Hero';
+//import Footer from '../Footer';
 import AudioRecorder from 'react-audio-recorder';
 import Transcript from '../Transcript'
-import Footer from '../Footer';
 import { useSnackbar } from 'notistack';
 import URLs from '../../api';
 
@@ -179,7 +179,7 @@ const Main = () => {
 
   return (
     <>
-      <Hero />
+      {/* <Hero /> */}
       <Container>
 
         {/* Audio Recorder */}
@@ -304,7 +304,7 @@ const Main = () => {
       <Container>
         <Transcript content={transcript} progress={progress} />
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
