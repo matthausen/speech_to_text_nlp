@@ -44,8 +44,6 @@ export default function AppDrawer(props) {
   const [{ entityList }] = useEntityValue();
   const list = entityList.list[0].entitiesJson;
 
-  console.log(list);
-
   return (
     <div className={classes.root}>
       <CssBaseline />
