@@ -40,7 +40,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
 const Transcript = (props) => {
   const classes = useStyles();
   const { content, progress } = props;
