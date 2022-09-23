@@ -51,7 +51,7 @@ ply==3.11
 preshed==3.0.2
 prometheus-client==0.7.1
 prompt-toolkit==3.0.2
-protobuf==3.10.0
+protobuf==3.18.3
 psycopg2==2.8.1
 ptyprocess==0.6.0
 pyasn1==0.4.7
